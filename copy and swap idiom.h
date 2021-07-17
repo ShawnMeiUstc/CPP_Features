@@ -12,19 +12,21 @@ class MyString
 	}
 
 public:
-	MyString() : m_data(nullptr), m_len(0) {}
-	MyString(const char *s) : m_len(strlen(s)) { copyData(s); }
+	MyString() : m_data(nullptr), m_len(0) { cout << "default constructor" << endl; }
+	MyString(const char *s) : m_len(strlen(s)) { copyData(s);  cout << "constructor" << endl;}
 
-	MyString(const MyString &s) : m_len(s.m_len) { copyData(s.m_data); }
+	MyString(const MyString &s) : m_len(s.m_len) { copyData(s.m_data); cout << " copy constructor" << endl;}
 
 	MyString(MyString&& s) noexcept : MyString()
 	{
 		swap(*this, s);
+		cout << " move constructor" << endl;
 	}
 
 	MyString& operator=(MyString rhs)
 	{
 		swap(*this, rhs);
+		cout << " copy & move assignment" << endl;
 		return *this;
 	}
 	// 实际上，我们比那个不需要多写代码move assignment，copy-and-swap 技巧 和 move-and-swap 技巧是共享同一个函数的。
@@ -46,6 +48,28 @@ public:
 	virtual ~MyString()
 	{
 		delete[] m_data;
+		cout << " destructor" << endl;
+	}
+
+	static void Run()
+	{
+		const char*  s = "123";
+		MyString c(s);
+		cout << "------------->\n";
+		MyString d(c);
+		cout << "------------->\n";
+
+		MyString e;
+		cout << "------------->\n";
+
+		e = d;
+		cout << "------------->\n";
+
+		MyString f(move(e));
+		cout << "------------->\n";
+
+		e = move(f);
+		cout << "------------->\n";
 	}
 
 private:
