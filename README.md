@@ -1,2 +1,2 @@
-# C-Features
+# C++ Features
 c++ notes
